@@ -1,0 +1,13 @@
+python-dotenv
+debugpy
+tree-math
+optax==0.2.2
+matplotlib
+numpy
+jupyterlab
+flax==0.8.3
+jax==0.4.28
+gitpython
+opencv-python
+scikit-learn
+lmdb
