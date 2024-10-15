@@ -5,16 +5,16 @@ import optax
 import functools
 class Trainer:
 
-    def __init__(self, model, optimizer, rng, x_sharding, state_sharding):
+    def __init__(self, model, optimizer, rng, x_sharding, state_sharding, y_sharding):
         self.model = model
         self.optimizer = optimizer
-        self.create_funcs(state_sharding, x_sharding)
+        self.create_funcs(state_sharding, x_sharding, y_sharding)
         self.rng = rng
 
-    # Loss function: Negative ELBO
-    def create_funcs(self, state_sharding, x_sharding):
+
+    def create_funcs(self, state_sharding, x_sharding, y_sharding):
         
-        @functools.partial(jax.jit, in_shardings=(state_sharding, x_sharding),
+        @functools.partial(jax.jit, in_shardings=(state_sharding, x_sharding,y_sharding),
                    out_shardings=state_sharding)
         
         def train_step(opt_state,x,y):
@@ -52,5 +52,3 @@ class Trainer:
             
         return params
 
-def to_jax_array(np_array):
-    return jnp.array(np_array)
