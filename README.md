@@ -63,7 +63,7 @@ Options and project boilerplate
 Allocate a node: 
 
 ```
-salloc --account=project_465001020 --partition=small-g --nodes=1 --gpus=2 --time=15:00
+salloc --account=project_465001020 --partition=small-g --nodes=1 --gpus=2 --time=10:00
 ```
 
 Send stuff into it:
