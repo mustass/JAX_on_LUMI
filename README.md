@@ -29,6 +29,17 @@ Once inside:
 $WITH_CONDA
 ```
 Navigate to the repo you want and run a `setup.sh` script.
+For some reason care needs to be given to how to install jax. Just installing requirements does not seem to avoid updating the jax version. 
+a manual call of 
+
+```
+pip install optax==0.2.2 flax==0.8.3 jax==0.4.28
+```
+is needed before 
+
+```
+pip install -r requirements.txt
+```
 
 ### commands to run a job on a GPU node
 
@@ -52,13 +63,13 @@ Options and project boilerplate
 Allocate a node: 
 
 ```
-salloc --account=project_465001020 --partition=small-g --nodes=1 --gpus=1 --time=05:00
+salloc --account=project_465001020 --partition=small-g --nodes=1 --gpus=2 --time=15:00
 ```
 
 Send stuff into it:
 
 ```
-srun singularity exec /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif bash -c "\$WITH_CONDA; source 
+srun singularity exec /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif bash -c "\$WITH_CONDA; source /project/project_465001020/hackathon/venv/bin/activate; python3 /project/project_465001020/hackathon/lumi_hackathon/scripts/train_cifar100.py"
 ```
 
 ===============
