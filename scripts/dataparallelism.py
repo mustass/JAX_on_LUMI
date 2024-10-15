@@ -1,16 +1,11 @@
-
-import os
 import functools
-from typing import Optional, Callable
-
-import numpy as np
+from typing import Callable
+import time
 import jax
-from jax import lax, random, numpy as jnp
+from jax import random, numpy as jnp
 
-import flax
-from flax import struct, traverse_util, linen as nn
-from flax.core import freeze, unfreeze
-from flax.training import train_state, checkpoints
+from flax import linen as nn
+from flax.training import train_state
 
 import optax # Optax for common losses and optimizers.
 
@@ -18,17 +13,16 @@ print(f'We have {jax.devices()} JAX devices now:')
 
 
 from jax.sharding import Mesh, PartitionSpec, NamedSharding
-from jax.lax import with_sharding_constraint
 from jax.experimental import mesh_utils
 
 import torch
 import torchvision
 import torchvision.transforms as transforms
 
-def get_dataloader(batch_size=64):
+def get_dataloader(batch_size=4096):
     transform = transforms.Compose([transforms.ToTensor()])
     trainset = torchvision.datasets.CIFAR10(root='/scratch/project_465001020/data', train=True, download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, drop_last=True )
     return trainloader
 
 
@@ -85,8 +79,6 @@ def model_predict(x,y, x_sharding, state_sharding,mesh,state):
   jax.debug.visualize_array_sharding(preds)
   print(f"Preds: {jnp.argmax(jax.nn.softmax(preds), axis=-1)}\n vs actual:\n {y}")
 
-"""### GGN vp"""
-
 def ggn_vp(loader, state,mesh_sharding,x_sharding):
   vec_sharding = mesh_sharding(PartitionSpec(None)) # the params_vec is replicated on each device
 
@@ -111,8 +103,8 @@ def ggn_vp(loader, state,mesh_sharding,x_sharding):
     _, jvp = jax.jvp(model_on_data, (params_vec,), (vec,))
     _, vjp_fn = jax.vjp(model_on_data, params_vec)
     ggn_vp_result += vjp_fn(jvp)[0]
-
-  jax.debug.visualize_array_sharding(ggn_vp_result)
+  
+  print("DONE")
 
 def run(EPOCHS):
   print(f"Get loader")
@@ -170,7 +162,9 @@ def run(EPOCHS):
 
   for e in range(EPOCHS):
     print(f"Running epoch {e}")
-    for (x,y) in loader:
+    print(f"Batches: {len(loader)}")
+    t0 = time.time()
+    for i, (x,y) in enumerate(loader):
       x = to_jax_array(x)
       y= to_jax_array(y)
       x = jnp.transpose(x,(0,2,3,1))
@@ -179,9 +173,13 @@ def run(EPOCHS):
 
       with mesh:
         state = train_step(state,x,y)
-
+    print(f"Time spent for epoch: {time.time()-t0}")
   
-  ggn_vp(loader,state,mesh_sharding,x_sharding)
+    ggn_vp(loader,state,mesh_sharding,x_sharding)
+
+
+if __name__ == "__main__":
+  run(1)
 
   
 

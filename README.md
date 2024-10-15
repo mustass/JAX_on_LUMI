@@ -63,13 +63,13 @@ Options and project boilerplate
 Allocate a node: 
 
 ```
-salloc --account=project_465001020 --partition=small-g --nodes=1 --gpus=2 --time=10:00
+salloc --account=project_465001020 --partition=standard-g --nodes=1 --gpus=8 --time=20:00
 ```
 
 Send stuff into it:
 
 ```
-srun singularity exec /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif bash -c "\$WITH_CONDA; source /project/project_465001020/hackathon/venv/bin/activate; python3 /project/project_465001020/hackathon/lumi_hackathon/scripts/train_cifar100.py"
+srun singularity exec /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif bash -c "\$WITH_CONDA; source /project/project_465001020/hackathon/venv/bin/activate; python3 /project/project_465001020/hackathon/lumi_hackathon/scripts/dataparallelism.py"
 ```
 
 ===============
@@ -82,3 +82,8 @@ module load singularity-userfilesystems
 
 srun --account=project_465001020 --partition=small-g --nodes=1 --gpus=1 --time=05:00 singularity exec /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif bash -c "\$WITH_CONDA; source /scratch/project_465001020/hackathon/venv/bin/activate; python3 src/training/train_fc.py"
 ```
+
+
+srun --interactive --jobid=8174459 --pty bash
+
+watch -n 1 rocm-smi
