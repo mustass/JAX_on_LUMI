@@ -159,7 +159,6 @@ def run(EPOCHS):
     state = state.apply_gradients(grads=grads)
     return state
 
-
   for e in range(EPOCHS):
     print(f"Running epoch {e}")
     print(f"Batches: {len(loader)}")
