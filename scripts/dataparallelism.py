@@ -3,7 +3,6 @@ from typing import Callable
 import time
 import jax
 from jax import random, numpy as jnp
-
 from flax import linen as nn
 from flax.training import train_state
 
@@ -22,7 +21,7 @@ import torchvision.transforms as transforms
 def get_dataloader(batch_size=4096):
     transform = transforms.Compose([transforms.ToTensor()])
     trainset = torchvision.datasets.CIFAR10(root='/scratch/project_465001020/data', train=True, download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, drop_last=True )
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, drop_last=True)
     return trainloader
 
 
@@ -110,7 +109,7 @@ def run(EPOCHS):
   print(f"Get loader")
   loader = get_dataloader()
 
-  device_mesh = mesh_utils.create_device_mesh((8,))
+  device_mesh = mesh_utils.create_device_mesh((len(jax.devices()),))
   print(f"Device mesh\n{device_mesh}")
 
   mesh = Mesh(devices=device_mesh, axis_names=('data'))

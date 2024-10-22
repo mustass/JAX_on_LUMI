@@ -7,6 +7,7 @@ venv/
 env/
 .env
 
+
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
 
@@ -27,6 +28,9 @@ logs/
 output/
 results/
 *.result
+omnitrace/
+rocprof/
+
 
 # Model files
 model/

@@ -13,5 +13,3 @@ module load rocm/6.0.3 omnitrace/1.12.0-rocm6.0.x omniperf/2.1.0
 
 export SALLOC_ACCOUNT=project_465001020
 export SBATCH_ACCOUNT=project_465001020
-
-

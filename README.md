@@ -63,13 +63,13 @@ Options and project boilerplate
 Allocate a node: 
 
 ```
-salloc --account=project_465001020 --partition=standard-g --nodes=2 --gpus=8 --time=10:00 --exclusive 
+salloc --account=project_465001020 --partition=standard-g --nodes=1 --gpus=8 --time=10:00 --exclusive 
 ```
 
 Send stuff into it:
 
 ```
-srun singularity exec /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif bash -c "\$WITH_CONDA; source /project/project_465001020/hackathon/venv/bin/activate; python3 /project/project_465001020/hackathon/lumi_hackathon/scripts/dataparallelism_multinode.py"
+srun singularity exec /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif bash -c "\$WITH_CONDA; source /project/project_465001020/hackathon/venv/bin/activate; python3 /project/project_465001020/hackathon/lumi_hackathon/scripts/dataparallelism.py"
 ```
 
 ===============
