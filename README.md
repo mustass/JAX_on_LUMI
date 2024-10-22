@@ -1,5 +1,5 @@
 # How to run code on LUMI AMD GPUs (JAX)
-This repo is a collection of notes from the LUMI Hackathon
+This repo is a collection of notes from the [LUMI Hackathon](https://md.sigma2.no/lumi-hackathon-2024) 
 
 
 ## LUMI G node
@@ -8,7 +8,7 @@ A node has 4 AMD MI250X GPUs with 128GB memory. However, the MI250x GPU modules 
 
 ![LUMI-G node](/pictures/lumig-node-overview.svg)
 
-https://docs.lumi-supercomputer.eu/hardware/lumig/
+[Full documentation](https://docs.lumi-supercomputer.eu/hardware/lumig/)
 
 ## Setup:
 The login node, upon login, has no software that we can use to train our amazing models. Futhermore, it has no real *environment/container* which we can use to run our software. On LUMI, **singularity** containers are used and these can be found in the folder: `/appl/local/containers/sif-images/`. We care only about the JAX one located at `/appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif`. Obviuosly, there will be updates so the paths can change. But in general, we need a singularity container with the correct ROCM drivers and a JAX installation built. So far it seems that JAX is built from source by people working for LUMI. So, whatever we do, we NEVER update or change the `jax` and `jaxlib` installations. 
