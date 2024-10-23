@@ -12,9 +12,9 @@ A node has 4 AMD MI250X GPUs with 128GB memory. However, the MI250x GPU modules 
 
 
 ## TL:DR;
-To run anything useful we need to use **singularity** containers. These can be configured, but usually they are provided by LUMI support. In case of JAX, the process seems to be very painful, so we just use the one provided by LUMI. 
+To run anything useful we need to use **singularity** containers. These can be configured, but usually they are provided by LUMI support. In case of JAX, the process of configuring one seems to be very painful, so we just use the one provided by LUMI. 
 
-The JAX container provided by LUMI comes with an Anaconda environment that has `jax` and `jaxlib` installed. What we need to do is to create a python `venv` and activate it inside the **singularity** container after activating the conda environment. (Yes, this is messy, we need a `venv` inside a `conda` env that is inside a **singularity** container). Setting this up is covered in the *Setup* section, alternatively see [sample script](/bash/setup.sh).
+The JAX container provided by LUMI comes with an Anaconda environment that has `jax` and `jaxlib` installed. (Whatever we do, we need to make sure that we do NOT touch these installations). With that warning in mind, we need to create a python `venv` and activate it inside the **singularity** container after activating the conda environment. (Yes, this is messy, we need a `venv` inside a `conda` env that is inside a **singularity** container). Setting this up is covered in the *Setup* section, alternatively see [sample script](/bash/setup.sh).
 
 Running code can be done with `srun` and `sbatch` and is covered in the *Running on a GPU node section*. Alternatively, see the [run on one node and 8 gpus](/bash/run.sh) and [run on multiple nodes](/bash/run_multinode.sh) scripts.
 
