@@ -10,6 +10,8 @@ A node has 4 AMD MI250X GPUs with 128GB memory. However, the MI250x GPU modules 
 
 [Full documentation](https://docs.lumi-supercomputer.eu/hardware/lumig/)
 
+[LUMI AI Workshop Materials](https://github.com/Lumi-supercomputer/Getting_Started_with_AI_workshop)
+
 
 ## TL:DR;
 To run anything useful we need to use **singularity** containers. These can be configured, but usually they are provided by LUMI support. In case of JAX, the process of configuring one seems to be very painful, so we just use the one provided by LUMI. 
