@@ -10,8 +10,17 @@ A node has 4 AMD MI250X GPUs with 128GB memory. However, the MI250x GPU modules 
 
 [Full documentation](https://docs.lumi-supercomputer.eu/hardware/lumig/)
 
+
+## TL:DR;
+To run anything useful we need to use **singularity** containers. These can be configured, but usually they are provided by LUMI support. In case of JAX, the process seems to be very painful, so we just use the one provided by LUMI. 
+
+The JAX container provided by LUMI comes with an Anaconda environment that has `jax` and `jaxlib` installed. What we need to do is to create a python `venv` and activate it inside the **singularity** container after activating the conda environment. (Yes, this is messy, we need a `venv` inside a `conda` env that is inside a **singularity** container). Setting this up is covered in the *Setup* section, alternatively see [sample script](/bash/setup.sh).
+
+Running code can be done with `srun` and `sbatch` and is covered in the *Running on a GPU node section*. Alternatively, see the [run on one node and 8 gpus](/bash/run.sh) and [run on multiple nodes](/bash/run_multinode.sh) scripts.
+
+The rest covers some quick nifty commands and optimizations that are still to be proven useful. Furthermore, the `/bash` directory also has some scripts to run `rocprofv3` and `omnitrace` profilers. 
 ## Setup:
-The login node, upon login, has no software that we can use to train our amazing models. Futhermore, it has no real *environment/container* which we can use to run our software. On LUMI, **singularity** containers are used and these can be found in the folder: `/appl/local/containers/sif-images/`. We care only about the JAX one located at `/appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif`. Obviuosly, there will be updates so the paths can change. But in general, we need a singularity container with the correct ROCM drivers and a JAX installation built. So far it seems that JAX is built from source by people working for LUMI. So, whatever we do, we NEVER update or change the `jax` and `jaxlib` installations. 
+The login node has no software that we can use to train our models. On LUMI, **singularity** containers are used and these can be found in the folder: `/appl/local/containers/sif-images/`. We care only about the JAX one located at `/appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif`. We should expect updates so the paths can change in the future. But in general, we need a singularity container with the correct ROCM drivers and a JAX installation built. So far it seems that JAX is built from source by people working for LUMI. So, whatever we do, we NEVER update or change the `jax` and `jaxlib` installations. 
 
 In the following we will setup a virtual environment for our python code. This needs to be done within the container we are going to use. 
 
@@ -22,7 +31,7 @@ module load singularity-userfilesystems/default
 singularity shell /appl/local/containers/sif-images/lumi-jax-rocm-6.2.0-python-3.12-jax-0.4.28.sif
 ```
 
-First line will load: `cotainr`, `singularity-bindings`, `singularity-userfilesystems`, `cotainr_installation`, `singularity-CPEbits` modules. I am not sure we need the `cotainr` ones, but the other three setup the `singularity` container. 
+First line will load: `cotainr`, `singularity-bindings`, `singularity-userfilesystems`, `cotainr_installation`, `singularity-CPEbits` modules. I am not sure we need the `cotainr` ones, but the other three setup the **singularity** container. 
 
 The second line binds our specific paths with singularity. So we can see our home and project folders. 
 
@@ -60,7 +69,7 @@ pip install .
 with or without the editable flag `-e`. Assuming you're working from inside a root of a python package. 
 
 ### Nothing makes sense and `jax` is of a wrong version just after `$WITH_CONDA`
-Given that I don't know how to use this correctly, but if one installs some packages on the login node whithout thinking, those can sometimes end up in the `~/.local/` path that singularity will always bind and thus the packages an be from there. I chose violence and deleted the whole directory at the LUMI hackathon. Quite sure it's not the best solution but it worked and didn't give any complications so far. 
+If one installs some packages on the login node without thinking, those can end up in the `~/.local/` path that singularity will always bind and thus the packages an be from there. I chose violence and deleted the whole directory at the LUMI hackathon. Quite sure it's not the best solution but it worked and didn't give any complications so far. 
 
 ### A sample setup script is available in `bash/setup.sh`
 
